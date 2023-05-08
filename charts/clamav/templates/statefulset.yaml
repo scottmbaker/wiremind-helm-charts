@@ -33,6 +33,23 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- if and .Values.proxy .Values.proxy.enabled }}
+            - name: http_proxy
+              value: {{ .Values.proxy.http_proxy }}
+            - name: https_proxy
+              value: {{ .Values.proxy.https_proxy }}
+            - name: no_proxy
+              value: {{ .Values.proxy.no_proxy }}
+            {{- else }}
+            - name: http_proxy
+              value: ""
+            - name: https_proxy
+              value: ""
+            - name: no_proxy
+              value: ""
+            {{- end }}          
+            
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           volumeMounts:

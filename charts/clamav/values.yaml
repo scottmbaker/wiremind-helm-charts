@@ -6,8 +6,8 @@ replicaCount: 1
 
 image:
   # TODO: Switch to clamav/clamav container
-  repository: mailu/clamav
-  tag: ""  # If not defined, uses appVersion
+  repository: clamav/clamav
+  tag: "1.1"  # If not defined, uses appVersion
   pullPolicy: IfNotPresent
 
 priorityClassName: ""
@@ -22,14 +22,14 @@ nameOverride: ""
 fullnameOverride: ""
 
 podSecurityContext:
-  runAsNonRoot: true
-  runAsUser: 2000
-  runAsGroup: 2000
+  runAsNonRoot: false
+  runAsUser: 0
+  runAsGroup: 0
 
 securityContext:
-  allowPrivilegeEscalation: false
-  runAsNonRoot: true
-  privileged: false
+  allowPrivilegeEscalation: true
+  runAsNonRoot: false
+  privileged: true
   capabilities:
     drop:
       - ALL
@@ -250,3 +250,10 @@ persistentVolume:
   ##   GKE, AWS & OpenStack)
   ##
   # storageClass: "-"
+
+
+proxy:
+  enabled: true
+  https_proxy: http://proxy-chain.intel.com:912
+  http_proxy: http://proxy-chain.intel.com:911
+  no_proxy: localhost,192.168.0.0/16,172.16.0.0/12,127.0.0.0/8,10.0.0.0/8,.intel.com,.svc,.cluster.local
